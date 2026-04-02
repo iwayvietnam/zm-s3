@@ -11,5 +11,5 @@ Copyright (C) 2026-present iWay Vietnam and/or its affiliates. All rights reserv
 
 Licensing
 =========
-Zm S3 is licensed under the GNU AFFERO GENERAL PUBLIC LICENSE, Version 3.
+Zm S3 is licensed under the GNU AFFERO GENERAL PUBLIC LICENSE, Version 3.  
 See [LICENSE](LICENSE) for the full license text.
