@@ -1,6 +1,6 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- * Zm S3 is the Zimbra Collaboration Open Source Edition extension for S3-compatible store manager to the Zimbra Mailbox.
+ * Zm S3 is the ECS S3 compatible store extension for Zimbra Collaboration Open Source Edition..
  * Copyright (C) 2026-present iWay Vietnam and/or its affiliates. All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
