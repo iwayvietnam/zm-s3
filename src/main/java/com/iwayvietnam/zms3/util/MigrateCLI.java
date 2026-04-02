@@ -22,11 +22,25 @@
  */
 package com.iwayvietnam.zms3.util;
 
+import org.apache.commons.cli.Options;
+
 /**
  * Migrate CLI
  * @author Nguyen Van Nguyen <nguyennv1981@gmail.com>
  */
 public class MigrateCLI {
+    private static final String OPT_MAILBOX = "mailbox";
+    private static final String OPT_STOP_ON_ERROR = "stopOnError";
+    private static final String OPT_HELP = "h";
+
+    private static Options options = new Options();
+
+    static {
+        options.addOption(null, OPT_MAILBOX, true, "Mailbox for migration");
+        options.addOption(null, OPT_STOP_ON_ERROR, false, "Stop replay on any error");
+        options.addOption(OPT_HELP, "help", false, "Show help (this output)");
+    }
+
     public static void main(String[] args) {
     }
 }
