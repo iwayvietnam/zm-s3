@@ -1,6 +1,6 @@
 Zimbra S3-compatible store manager (Zm S3)
 =========================================
-Zm S3 is the ECS S3 compatible store extension for Zimbra Collaboration Open Source Edition.
+Zm S3 is the ECS S3 compatible store extension for Zimbra Collaboration Open Source Edition.  
 Copyright (C) 2026-present iWay Vietnam and/or its affiliates. All rights reserved.
 
 ## Building Java extension
