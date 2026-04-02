@@ -28,6 +28,7 @@ import com.iwayvietnam.zms3.locator.S3Locator;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.external.ExternalStoreManager;
 import io.minio.*;
 import io.minio.errors.MinioException;
@@ -192,6 +193,12 @@ public class MinioStoreManager extends ExternalStoreManager {
         }
 
         return paths;
+    }
+
+    @Override
+    public MailboxBlob getMailboxBlob(Mailbox mbox, int itemId, int revision, String locator, boolean validate) throws ServiceException {
+        var mblob = new MinioMailboxBlob(mbox, itemId, revision, locator);
+        return (!validate || mblob.validateBlob()) ? mblob : null;
     }
 
     @Override
