@@ -88,7 +88,7 @@ public class AwsStoreManager extends ExternalStoreManager  {
     @Override
     public String writeStreamToStore(InputStream in, long actualSize, Mailbox mailbox) throws IOException, ServiceException {
         ZimbraLog.store.debug(String.format(
-                "writeStreamToStore - start: actualSize - %s, accountId - %s", actualSize, mailbox.getAccountId()
+            "writeStreamToStore - start: actualSize - %s, accountId - %s", actualSize, mailbox.getAccountId()
         ));
         var locator = LocatorUtil.generateLocator(mailbox);
 
@@ -102,7 +102,9 @@ public class AwsStoreManager extends ExternalStoreManager  {
         );
 
         String stringLocator = LocatorUtil.toStringLocator(locator);
-        ZimbraLog.store.debug(String.format("writeStreamToStore() - end: locator - %s", stringLocator));
+        ZimbraLog.store.debug(String.format(
+            "writeStreamToStore() - end: locator - %s", stringLocator)
+        );
         return stringLocator;
     }
 
@@ -113,7 +115,9 @@ public class AwsStoreManager extends ExternalStoreManager  {
         ));
 
         var el = LocatorUtil.fromStringLocator(locator);
-        ZimbraLog.store.debug(String.format("Minio.readStreamFromStore() - reading: bucket - %s, key - %s", el.getBucketName(), el.getKey()));
+        ZimbraLog.store.debug(String.format(
+            "readStreamFromStore() - reading: bucket - %s, key - %s", el.getBucketName(), el.getKey())
+        );
 
         return client.getObject(
             req -> {
@@ -124,10 +128,12 @@ public class AwsStoreManager extends ExternalStoreManager  {
 
     @Override
     public boolean deleteFromStore(String locator, Mailbox mailbox) throws IOException {
-        ZimbraLog.store.debug(String.format("deleteFromStore() - start: locator - %s, accountId - %s", locator, mailbox.getAccountId()));
+        ZimbraLog.store.debug(String.format(
+            "deleteFromStore() - start: locator - %s, accountId - %s", locator, mailbox.getAccountId())
+        );
         var el = LocatorUtil.fromStringLocator(locator);
         ZimbraLog.store.debug(String.format(
-                "deleteFromStore() - deleting: bucket - %s, key - %s", el.getBucketName(), el.getKey())
+            "deleteFromStore() - deleting: bucket - %s, key - %s", el.getBucketName(), el.getKey())
         );
 
         client.deleteObject(req -> {

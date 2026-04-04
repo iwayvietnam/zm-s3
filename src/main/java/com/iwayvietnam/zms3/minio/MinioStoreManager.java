@@ -114,7 +114,9 @@ public class MinioStoreManager extends ExternalStoreManager {
                     .build()
             );
         } catch (MinioException e) {
-            throw ServiceException.RESOURCE_UNREACHABLE(String.format("Put %s to %s failed", locator.getKey(), locator.getBucketName()), e);
+            throw ServiceException.RESOURCE_UNREACHABLE(
+                String.format("Put %s to %s failed", locator.getKey(), locator.getBucketName()), e
+            );
         }
 
         String stringLocator = LocatorUtil.toStringLocator(locator);
@@ -129,7 +131,9 @@ public class MinioStoreManager extends ExternalStoreManager {
         ));
 
         var el = LocatorUtil.fromStringLocator(locator);
-        ZimbraLog.store.debug(String.format("Minio.readStreamFromStore() - reading: bucket - %s, key - %s", el.getBucketName(), el.getKey()));
+        ZimbraLog.store.debug(String.format(
+            "readStreamFromStore() - reading: bucket - %s, key - %s", el.getBucketName(), el.getKey())
+        );
 
         try {
             return client.getObject(
@@ -145,7 +149,9 @@ public class MinioStoreManager extends ExternalStoreManager {
 
     @Override
     public boolean deleteFromStore(String locator, Mailbox mailbox) throws IOException {
-        ZimbraLog.store.debug(String.format("deleteFromStore() - start: locator - %s, accountId - %s", locator, mailbox.getAccountId()));
+        ZimbraLog.store.debug(String.format(
+            "deleteFromStore() - start: locator - %s, accountId - %s", locator, mailbox.getAccountId())
+        );
         var el = LocatorUtil.fromStringLocator(locator);
         ZimbraLog.store.debug(String.format(
             "deleteFromStore() - deleting: bucket - %s, key - %s", el.getBucketName(), el.getKey())
@@ -212,7 +218,9 @@ public class MinioStoreManager extends ExternalStoreManager {
     }
 
     public boolean validate(String locator, Mailbox mbox) throws Exception {
-        ZimbraLog.store.debug(String.format("validate() - start: locator - %s, accountId - %s", locator, mbox.getAccountId()));
+        ZimbraLog.store.debug(String.format(
+            "validate() - start: locator - %s, accountId - %s", locator, mbox.getAccountId())
+        );
         var el = LocatorUtil.fromStringLocator(locator);
         return (null != client.statObject(
             StatObjectArgs.builder()
