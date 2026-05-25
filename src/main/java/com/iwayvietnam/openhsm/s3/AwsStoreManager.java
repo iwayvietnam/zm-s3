@@ -30,6 +30,7 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.store.external.ExternalStoreManager;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -91,14 +92,17 @@ public class AwsStoreManager extends ExternalStoreManager  {
         ));
         var locator = LocatorUtil.generateLocator(mailbox);
 
-        createBucketAsNeeded(locator.getBucketName());
-
-        client.putObject(
-            req -> {
-                req.bucket(locator.getBucketName()).key(locator.getKey());
-            },
-            RequestBody.fromInputStream(in, actualSize)
-        );
+        try {
+            createBucketAsNeeded(locator.getBucketName());
+            client.putObject(
+                    req -> {
+                        req.bucket(locator.getBucketName()).key(locator.getKey());
+                    },
+                    RequestBody.fromInputStream(in, actualSize)
+            );
+        } catch (SdkException e) {
+            throw new IOException(e);
+        }
 
         String stringLocator = LocatorUtil.toStringLocator(locator);
         Log.openhsm.debug(String.format(
@@ -118,11 +122,13 @@ public class AwsStoreManager extends ExternalStoreManager  {
             "readStreamFromStore() - reading: bucket - %s, key - %s", el.getBucketName(), el.getKey())
         );
 
-        return client.getObject(
-            req -> {
+        try {
+            return client.getObject(req -> {
                 req.bucket(el.getBucketName()).key(el.getKey());
-            }
-        );
+            });
+        } catch (SdkException e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
@@ -135,9 +141,13 @@ public class AwsStoreManager extends ExternalStoreManager  {
             "deleteFromStore() - deleting: bucket - %s, key - %s", el.getBucketName(), el.getKey())
         );
 
-        client.deleteObject(req -> {
-            req.bucket(el.getBucketName()).key(el.getKey());
-        });
+        try {
+            client.deleteObject(req -> {
+                req.bucket(el.getBucketName()).key(el.getKey());
+            });
+        } catch (SdkException e) {
+            throw new IOException(e);
+        }
         return true;
     }
 

@@ -46,7 +46,6 @@ import java.util.concurrent.*;
  */
 public class MinioStoreManager extends ExternalStoreManager {
     private MinioClient client;
-    private ExecutorService executor;
     private final Set<String> bucketNames = new HashSet<String>();
 
     @Override
@@ -58,7 +57,6 @@ public class MinioStoreManager extends ExternalStoreManager {
                 .endpoint(config.getEndpoint())
                 .credentials(config.getAccessKey(), config.getSecretKey())
                 .build();
-        executor = Executors.newFixedThreadPool(config.getDeleteThreads());
         try {
             fillBucketNames();
         } catch (MinioException e) {
@@ -72,7 +70,6 @@ public class MinioStoreManager extends ExternalStoreManager {
     public void shutdown() {
         Log.openhsm.info("Shutting down Minio Store Manager");
         super.shutdown();
-        executor.shutdown();
         bucketNames.clear();
         try {
             client.close();
@@ -80,7 +77,6 @@ public class MinioStoreManager extends ExternalStoreManager {
             throw new RuntimeException(e);
         }
         client = null;
-        executor = null;
     }
 
     @Override
@@ -149,27 +145,15 @@ public class MinioStoreManager extends ExternalStoreManager {
         Log.openhsm.debug(String.format(
             "deleteFromStore() - deleting: bucket - %s, key - %s", el.getBucketName(), el.getKey())
         );
-
         try {
-            executor.submit(new Thread(() -> {
-                try {
-                    client.removeObject(
-                        RemoveObjectArgs.builder()
-                            .bucket(el.getBucketName())
-                            .object(el.getKey())
-                            .build()
-                    );
-                } catch (MinioException e) {
-                    Log.openhsm.error(String.format(
-                        "Failed to delete from - %s", locator), e
-                    );
-                }
-            }));
-        } catch (Exception e) {
-            Log.openhsm.error(String.format("Failed to delete from - %s", locator), e);
+            client.removeObject(RemoveObjectArgs.builder()
+                .bucket(el.getBucketName())
+                .object(el.getKey())
+                .build()
+            );
+        } catch (MinioException e) {
             throw new IOException(e);
         }
-
         return true;
     }
 
