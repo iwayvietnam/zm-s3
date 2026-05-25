@@ -35,8 +35,6 @@ public interface Configuration {
 
     String getStoreName();
 
-    int getDeleteThreads();
-
     int getHsmBatchSize();
 
     int getHsmParallelismLevel();

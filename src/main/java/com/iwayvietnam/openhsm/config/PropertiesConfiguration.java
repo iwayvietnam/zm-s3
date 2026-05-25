@@ -46,7 +46,6 @@ public class PropertiesConfiguration implements Configuration {
     private final String accessKey;
     private final String secretKey;
     private final String storeName;
-    private final int deleteThreads;
     private final int hsmBatchSize;
     private final int parallelismLevel;
 
@@ -58,7 +57,6 @@ public class PropertiesConfiguration implements Configuration {
         accessKey = loadStringProperty(ConfigConstants.ZM_S3_ACCESS_KEY);
         secretKey = loadStringProperty(ConfigConstants.ZM_S3_SECRET_KEY);
         storeName = loadStringProperty(ConfigConstants.ZM_S3_STORE_NAME);
-        deleteThreads = loadIntProperty(ConfigConstants.ZM_S3_DELETE_THREADS);
         hsmBatchSize = loadIntProperty(ConfigConstants.ZM_HSM_BATCH_SIZE);
         parallelismLevel = loadIntProperty(ConfigConstants.ZM_HSM_PARALLELISM_LEVEL, PARALLELISM_LEVEL);
     }
@@ -89,11 +87,6 @@ public class PropertiesConfiguration implements Configuration {
     @Override
     public String getStoreName() {
         return storeName;
-    }
-
-    @Override
-    public int getDeleteThreads() {
-        return deleteThreads;
     }
 
     @Override
